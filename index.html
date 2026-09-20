@@ -1,0 +1,3936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Lock-In</title>
+
+<style>
+:root{
+  --blue:#2563eb;
+  --blue-dark:#1d4ed8;
+  --blue-light:#eff6ff;
+  --green:#16a34a;
+  --green-light:#f0fdf4;
+  --red:#dc2626;
+  --orange:#ea580c;
+  --purple:#7c3aed;
+  --gold:#d97706;
+  --text:#172033;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --bg:#f5f7fb;
+  --white:#ffffff;
+  --shadow:0 8px 25px rgba(15,23,42,.06);
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+}
+
+header{
+  height:72px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  font-size:21px;
+}
+
+.logo-ball{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:var(--blue);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.header-stat{
+  padding:9px 13px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#fff;
+  font-size:13px;
+}
+
+.reset-btn{
+  border:0;
+  background:#fff;
+  color:var(--red);
+  border:1px solid #fecaca;
+  padding:9px 14px;
+  border-radius:10px;
+  font-weight:700;
+}
+
+.reset-btn:hover{
+  background:#fef2f2;
+}
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 72px);
+}
+
+.sidebar{
+  width:235px;
+  background:#fff;
+  border-right:1px solid var(--border);
+  padding:20px 14px;
+  flex-shrink:0;
+}
+
+.nav-title{
+  color:#94a3b8;
+  text-transform:uppercase;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+  padding:0 10px;
+  margin:8px 0;
+}
+
+.nav-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:10px;
+  color:#475569;
+  font-weight:600;
+  margin-bottom:3px;
+}
+
+.nav-btn:hover{
+  background:#f8fafc;
+}
+
+.nav-btn.active{
+  background:var(--blue-light);
+  color:var(--blue);
+}
+
+main{
+  flex:1;
+  padding:28px;
+  max-width:1500px;
+  width:100%;
+  margin:auto;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:24px;
+  gap:20px;
+}
+
+.page-title{
+  font-size:28px;
+  font-weight:850;
+  margin:0 0 5px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  margin:0;
+}
+
+.grid{
+  display:grid;
+  gap:18px;
+}
+
+.grid-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.grid-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+}
+
+.card-title{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:14px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:#fff;
+  border-radius:20px;
+  padding:28px;
+  margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.hero h1{
+  margin:0 0 7px;
+  font-size:31px;
+}
+
+.hero p{
+  margin:0;
+  opacity:.88;
+}
+
+.hero-overall{
+  text-align:center;
+  min-width:110px;
+}
+
+.hero-overall strong{
+  display:block;
+  font-size:52px;
+  line-height:1;
+}
+
+.hero-overall span{
+  font-size:12px;
+  opacity:.8;
+}
+
+.stat-card{
+  padding:18px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:850;
+}
+
+.stat-small{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.progress{
+  height:8px;
+  background:#e5e7eb;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  background:var(--blue);
+  border-radius:99px;
+}
+
+.attribute{
+  margin-bottom:15px;
+}
+
+.attribute-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.attribute-value{
+  color:var(--blue);
+}
+
+.attr-track{
+  height:8px;
+  background:#edf2f7;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.attr-fill{
+  height:100%;
+  background:var(--blue);
+  border-radius:99px;
+}
+
+.position-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.position-pill{
+  padding:7px 11px;
+  border-radius:99px;
+  background:var(--blue-light);
+  color:var(--blue);
+  font-size:12px;
+  font-weight:800;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 15px;
+  font-weight:750;
+}
+
+.btn-primary{
+  background:var(--blue);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--blue-dark);
+}
+
+.btn-secondary{
+  background:#f1f5f9;
+  color:#334155;
+}
+
+.btn-danger{
+  background:#fef2f2;
+  color:var(--red);
+}
+
+.btn-green{
+  background:#dcfce7;
+  color:#166534;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  background:#fff;
+  color:var(--text);
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#93c5fd;
+  box-shadow:0 0 0 3px #dbeafe;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:750;
+  margin-bottom:6px;
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.schedule-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(100px,1fr));
+  gap:10px;
+}
+
+.schedule-day{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  background:#f8fafc;
+}
+
+.schedule-day-name{
+  font-weight:850;
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  font-weight:650;
+  margin:8px 0 0;
+  cursor:pointer;
+}
+
+.check-row input{
+  width:auto;
+  margin:0;
+}
+
+@media(max-width:900px){
+  .schedule-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+.drill-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+.drill-card{
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+}
+
+.drill-image{
+  width:100%;
+  height:170px;
+  object-fit:cover;
+  display:block;
+}
+
+.drill-content{
+  padding:17px;
+}
+
+.drill-title{
+  font-size:17px;
+  font-weight:850;
+  margin-bottom:6px;
+}
+
+.drill-description{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  min-height:40px;
+}
+
+.drill-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:12px 0;
+}
+
+.tag{
+  background:#eff6ff;
+  color:#2563eb;
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.drill-actions{
+  display:flex;
+  gap:8px;
+}
+
+.drill-actions button{
+  flex:1;
+}
+
+.instructions{
+  display:none;
+  background:#f8fafc;
+  border-top:1px solid var(--border);
+  padding:13px;
+  color:#475569;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.instructions.show{
+  display:block;
+}
+
+.plan-list{
+  display:grid;
+  gap:10px;
+}
+
+.plan-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.plan-day{
+  width:48px;
+  height:42px;
+  border-radius:10px;
+  background:#eff6ff;
+  color:var(--blue);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:850;
+  flex-shrink:0;
+}
+
+.plan-info{
+  flex:1;
+}
+
+.plan-info strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.plan-info span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,
+td{
+  padding:11px 9px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.badge{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.badge-green{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge-red{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge-orange{
+  background:#ffedd5;
+  color:#9a3412;
+}
+
+.badge-blue{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.goal{
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+.goal-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.goal-name{
+  font-weight:800;
+}
+
+.goal-percent{
+  color:var(--blue);
+  font-weight:800;
+}
+
+.chart{
+  height:230px;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  padding:15px 5px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.bar{
+  flex:1;
+  min-width:8px;
+  background:var(--blue);
+  border-radius:5px 5px 0 0;
+  position:relative;
+}
+
+.bar-label{
+  position:absolute;
+  bottom:-22px;
+  width:100%;
+  text-align:center;
+  font-size:9px;
+  color:var(--muted);
+}
+
+.recommendation{
+  border-left:4px solid var(--blue);
+  background:#eff6ff;
+  padding:13px 15px;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+.recommendation.high{
+  border-left-color:var(--red);
+  background:#fef2f2;
+}
+
+.recommendation.maintain{
+  border-left-color:var(--green);
+  background:#f0fdf4;
+}
+
+.recommendation strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.toast-container{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.toast{
+  width:310px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-left:4px solid var(--green);
+  border-radius:12px;
+  box-shadow:0 15px 35px rgba(15,23,42,.15);
+  padding:13px 15px;
+  animation:toastIn .25s ease;
+}
+
+.toast-title{
+  font-weight:800;
+  font-size:13px;
+  margin-bottom:3px;
+}
+
+.toast-text{
+  color:var(--muted);
+  font-size:12px;
+}
+
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  z-index:90;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  background:#fff;
+  width:min(450px,100%);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(15,23,42,.2);
+}
+
+.modal-box h2{
+  margin-top:0;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px;
+}
+
+.card-designs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+
+.player-card{
+  min-height:190px;
+  border-radius:15px;
+  padding:15px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.player-card.selected{
+  outline:3px solid var(--blue);
+  outline-offset:2px;
+}
+
+.card-red{
+  background:linear-gradient(145deg,#991b1b,#ef4444);
+}
+
+.card-blue{
+  background:linear-gradient(145deg,#1e3a8a,#3b82f6);
+}
+
+.card-green{
+  background:linear-gradient(145deg,#166534,#22c55e);
+}
+
+.card-purple{
+  background:linear-gradient(145deg,#581c87,#a855f7);
+}
+
+.card-gold{
+  background:linear-gradient(145deg,#92400e,#f59e0b);
+}
+
+.card-rating{
+  font-size:32px;
+  font-weight:900;
+}
+
+.card-name{
+  font-weight:850;
+  margin-top:35px;
+}
+
+.card-position{
+  opacity:.8;
+  font-size:11px;
+}
+
+.timeline{
+  border-left:2px solid #dbeafe;
+  margin-left:8px;
+  padding-left:22px;
+}
+
+.timeline-item{
+  position:relative;
+  margin-bottom:20px;
+}
+
+.timeline-item:before{
+  content:"";
+  width:10px;
+  height:10px;
+  background:var(--blue);
+  border-radius:50%;
+  position:absolute;
+  left:-28px;
+  top:4px;
+}
+
+.timeline-date{
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:3px;
+}
+
+.timeline-title{
+  font-weight:800;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:25px;
+}
+
+@media(max-width:1050px){
+  .sidebar{
+    width:190px;
+  }
+
+  .drill-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .grid-4{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .card-designs{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:750px){
+  header{
+    padding:0 14px;
+  }
+
+  .header-stat{
+    display:none;
+  }
+
+  .layout{
+    display:block;
+  }
+
+  .sidebar{
+    width:100%;
+    border-right:0;
+    border-bottom:1px solid var(--border);
+    overflow-x:auto;
+    display:flex;
+    gap:5px;
+    padding:8px;
+  }
+
+  .nav-title{
+    display:none;
+  }
+
+  .nav-btn{
+    white-space:nowrap;
+    width:auto;
+    margin:0;
+  }
+
+  main{
+    padding:18px 14px;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4{
+    grid-template-columns:1fr;
+  }
+
+  .drill-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    align-items:flex-start;
+  }
+
+  .page-header{
+    flex-direction:column;
+  }
+
+  .card-designs{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="logo">
+    <div class="logo-ball">⚽</div>
+    <span>Football Lock-In</span>
+  </div>
+
+  <div class="header-right">
+    <div class="header-stat">
+      Level <strong id="headerLevel">1</strong>
+    </div>
+
+    <div class="header-stat">
+      🪙 <strong id="headerCoins">0</strong>
+    </div>
+
+    <button class="reset-btn" onclick="openResetModal()">Reset</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+  <div class="nav-title">Main</div>
+
+  <button class="nav-btn active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+  <button class="nav-btn" onclick="showPage('training',this)">🏃 Training</button>
+  <button class="nav-btn" onclick="showPage('matches',this)">⚽ Matches</button>
+  <button class="nav-btn" onclick="showPage('goals',this)">🎯 Goals</button>
+
+  <div class="nav-title">Progress</div>
+
+  <button class="nav-btn" onclick="showPage('stats',this)">📊 Stats</button>
+  <button class="nav-btn" onclick="showPage('recovery',this)">💚 Recovery</button>
+  <button class="nav-btn" onclick="showPage('diary',this)">📖 Diary</button>
+  <button class="nav-btn" onclick="showPage('reports',this)">📈 Reports</button>
+
+  <div class="nav-title">Career</div>
+
+  <button class="nav-btn" onclick="showPage('career',this)">🗓 Career</button>
+  <button class="nav-btn" onclick="showPage('cards',this)">🃏 Cards</button>
+
+  <div class="nav-title">Other</div>
+
+  <button class="nav-btn" onclick="showPage('settings',this)">⚙️ Settings</button>
+
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+  <div class="hero">
+
+    <div>
+      <h1 id="welcomeName">Welcome, Player</h1>
+      <p id="welcomeInfo">Set up your profile to start your football journey.</p>
+    </div>
+
+    <div class="hero-overall">
+      <strong id="overallValue">50</strong>
+      <span>OVERALL</span>
+    </div>
+
+  </div>
+
+  <div class="grid grid-4">
+
+    <div class="card stat-card">
+      <div class="stat-label">LEVEL</div>
+      <div class="stat-value" id="dashLevel">1</div>
+      <div class="stat-small" id="dashXP">0 XP</div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="stat-label">MATCHES</div>
+      <div class="stat-value" id="dashMatches">0</div>
+      <div class="stat-small">Recorded</div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="stat-label">TRAINING</div>
+      <div class="stat-value" id="dashTraining">0</div>
+      <div class="stat-small">Sessions</div>
+    </div>
+
+    <div class="card stat-card">
+      <div class="stat-label">COINS</div>
+      <div class="stat-value" id="dashCoins">0</div>
+      <div class="stat-small">Spend on cards</div>
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+      <div class="card-title">Player Profile</div>
+
+      <div class="grid grid-2">
+
+        <div>
+          <div class="stat-label">NAME</div>
+          <strong id="profileName">Player</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">AGE</div>
+          <strong id="profileAge">15</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">CLUB</div>
+          <strong id="profileClub">Not set</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">SEASON</div>
+          <strong id="profileSeason">2026/27</strong>
+        </div>
+
+      </div>
+
+      <br>
+
+      <div class="stat-label">POSITIONS</div>
+      <div class="position-list" id="profilePositions"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">XP Progress</div>
+
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <strong id="xpLevelText">Level 1</strong>
+        <span id="xpText">0 / 100 XP</span>
+      </div>
+
+      <div class="progress">
+        <div class="progress-bar" id="xpBar" style="width:0%"></div>
+      </div>
+
+      <br>
+
+      <div class="card-title">Smart Training Recommendation</div>
+
+      <div id="smartRecommendation"></div>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Attributes</div>
+
+      <div id="dashboardAttributes"></div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">This Week</div>
+
+      <div class="plan-list" id="weeklyPlan"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- TRAINING -->
+
+<section id="training" class="page">
+
+  <div class="page-header">
+
+    <div>
+      <h1 class="page-title">Drill Training</h1>
+      <p class="page-subtitle">Build your speed. Improve your skills. Get better.</p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-title">Your Weekly Football Schedule</div>
+
+    <p style="color:var(--muted);font-size:13px;margin-top:-5px;margin-bottom:18px">
+      Choose which days you normally have games and team training. Your self-training and recovery days will then be arranged around them.
+    </p>
+
+    <div class="schedule-grid">
+      <div class="schedule-day">
+        <div class="schedule-day-name">MON</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="MON">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="MON">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">TUE</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="TUE">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="TUE">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">WED</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="WED">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="WED">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">THU</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="THU">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="THU">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">FRI</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="FRI">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="FRI">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">SAT</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="SAT">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="SAT">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+      <div class="schedule-day">
+        <div class="schedule-day-name">SUN</div>
+        <label class="check-row">
+          <input type="checkbox" class="match-day-check" value="SUN">
+          <span>⚽ Game</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" class="team-day-check" value="SUN">
+          <span>🏃 Team Training</span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top:16px" onclick="saveWeeklySchedule()">
+      Save Weekly Schedule
+    </button>
+
+  </div>
+
+  <br>
+
+  <div class="card">
+
+    <div class="card-title">Weekly Plan</div>
+
+    <p style="color:var(--muted);font-size:13px;margin-top:-5px;margin-bottom:18px">
+      Self-training is automatically placed around your games and team sessions.
+    </p>
+
+    <div class="plan-list" id="trainingWeeklyPlan"></div>
+
+  </div>
+
+  <br>
+
+  <div class="page-header">
+
+    <div>
+      <h2 class="page-title" style="font-size:22px">Drills</h2>
+      <p class="page-subtitle">Complete real-life drills to improve specific attributes.</p>
+    </div>
+
+  </div>
+
+  <div class="drill-grid" id="drillGrid"></div>
+
+  <br>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Build Your Own Workout</div>
+
+      <div class="form-group">
+        <label>Workout Name</label>
+        <input id="customWorkoutName" placeholder="e.g. Saturday Speed Session">
+      </div>
+
+      <div class="form-group">
+        <label>Training Type</label>
+        <select id="customWorkoutType">
+          <option value="Speed">Speed</option>
+          <option value="Dribbling">Dribbling</option>
+          <option value="Shooting">Shooting</option>
+          <option value="Passing">Passing</option>
+          <option value="Stamina">Stamina</option>
+          <option value="Strength">Strength</option>
+          <option value="Decisions">Decisions</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Minutes</label>
+        <input id="customWorkoutMinutes" type="number" min="1" value="30">
+      </div>
+
+      <button class="btn btn-primary" onclick="completeCustomWorkout()">
+        Complete Workout
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Training History</div>
+
+      <div id="trainingHistory"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MATCHES -->
+
+<section id="matches" class="page">
+
+  <div class="page-header">
+
+    <div>
+      <h1 class="page-title">Matches</h1>
+      <p class="page-subtitle">Record your real football matches and track your performances.</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Record Match</div>
+
+      <div class="grid grid-2">
+
+        <div class="form-group">
+          <label>Opponent</label>
+          <input id="opponent" placeholder="Opponent">
+        </div>
+
+        <div class="form-group">
+          <label>Date</label>
+          <input id="matchDate" type="date">
+        </div>
+
+        <div class="form-group">
+          <label>Result</label>
+          <select id="result">
+            <option value="win">Win</option>
+            <option value="draw">Draw</option>
+            <option value="loss">Loss</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Minutes</label>
+          <input id="minutes" type="number" value="90">
+        </div>
+
+        <div class="form-group">
+          <label>Goals</label>
+          <input id="goals" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Assists</label>
+          <input id="assists" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Shots on Target</label>
+          <input id="shotsTarget" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Dribbles</label>
+          <input id="dribbles" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Tackles</label>
+          <input id="tackles" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Crosses</label>
+          <input id="crosses" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Missed Chances</label>
+          <input id="missed" type="number" min="0" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Cards</label>
+          <input id="cards" type="number" min="0" max="2" value="0">
+        </div>
+
+      </div>
+
+      <button class="btn btn-primary" onclick="recordMatch()">
+        Save Match
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Match Rating</div>
+
+      <div style="text-align:center;padding:25px">
+        <div style="font-size:60px;font-weight:900;color:var(--blue)" id="previewRating">
+          6.0
+        </div>
+
+        <div style="color:var(--muted)">
+          Automatic rating based on your match stats.
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="width:100%" onclick="updatePreviewRating()">
+        Calculate Rating
+      </button>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="card">
+
+    <div class="card-title">Match History</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Opponent</th>
+            <th>Result</th>
+            <th>G</th>
+            <th>A</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+
+        <tbody id="matchTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- GOALS -->
+
+<section id="goals" class="page">
+
+  <div class="page-header">
+
+    <div>
+      <h1 class="page-title">Football Goals</h1>
+      <p class="page-subtitle">Set personal goals and keep track of your progress.</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Create Goal</div>
+
+      <div class="form-group">
+        <label>Goal</label>
+        <input id="goalName" placeholder="e.g. Improve weak foot">
+      </div>
+
+      <div class="form-group">
+        <label>Target</label>
+        <input id="goalTarget" type="number" min="1" value="10">
+      </div>
+
+      <div class="form-group">
+        <label>Unit</label>
+        <input id="goalUnit" placeholder="sessions, goals, assists...">
+      </div>
+
+      <button class="btn btn-primary" onclick="addGoal()">
+        Add Goal
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Your Goals</div>
+      <div id="goalsList"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section id="stats" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Progress & Stats</h1>
+      <p class="page-subtitle">See how your football development is progressing.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+      <div class="card-title">Overall Progress</div>
+      <div class="chart" id="overallChart"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Match Ratings</div>
+      <div class="chart" id="ratingChart"></div>
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="card">
+
+    <div class="card-title">Current Attributes</div>
+
+    <div class="grid grid-2" id="statsAttributes"></div>
+
+  </div>
+
+</section>
+
+
+<!-- RECOVERY -->
+
+<section id="recovery" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Recovery & Readiness</h1>
+      <p class="page-subtitle">Track how ready you feel for football.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Today's Recovery</div>
+
+      <div class="form-group">
+        <label>Sleep Quality</label>
+        <select id="sleepQuality">
+          <option value="5">Excellent</option>
+          <option value="4">Good</option>
+          <option value="3">Okay</option>
+          <option value="2">Poor</option>
+          <option value="1">Very Poor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Energy</label>
+        <select id="energy">
+          <option value="5">Very High</option>
+          <option value="4">High</option>
+          <option value="3">Normal</option>
+          <option value="2">Low</option>
+          <option value="1">Very Low</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Soreness</label>
+        <select id="soreness">
+          <option value="5">None</option>
+          <option value="4">Very Mild</option>
+          <option value="3">Moderate</option>
+          <option value="2">High</option>
+          <option value="1">Very High</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveRecovery()">
+        Save Recovery
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Readiness</div>
+
+      <div style="text-align:center;padding:20px">
+        <div id="readinessValue" style="font-size:60px;font-weight:900;color:var(--green)">
+          —
+        </div>
+
+        <div id="readinessText" style="color:var(--muted)">
+          Record today's recovery to calculate readiness.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- DIARY -->
+
+<section id="diary" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Football Diary</h1>
+      <p class="page-subtitle">Write down how training and matches felt.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">New Entry</div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input id="diaryDate" type="date">
+      </div>
+
+      <div class="form-group">
+        <label>Entry</label>
+        <textarea id="diaryText" placeholder="How did football go today?"></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="addDiary()">
+        Save Entry
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Diary</div>
+
+      <div id="diaryList"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- REPORTS -->
+
+<section id="reports" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Weekly Reports</h1>
+      <p class="page-subtitle">Automatic summaries of your football development.</p>
+    </div>
+  </div>
+
+  <div id="weeklyReport"></div>
+
+</section>
+
+
+<!-- CAREER -->
+
+<section id="career" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Career Timeline</h1>
+      <p class="page-subtitle">Your football journey, recorded over time.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Career Information</div>
+
+      <div class="grid grid-2">
+
+        <div>
+          <div class="stat-label">CURRENT SEASON</div>
+          <strong id="careerSeason">2026/27</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">OVERALL</div>
+          <strong id="careerOverall">50</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">MATCHES</div>
+          <strong id="careerMatches">0</strong>
+        </div>
+
+        <div>
+          <div class="stat-label">TRAINING</div>
+          <strong id="careerTraining">0</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Timeline</div>
+
+      <div class="timeline" id="timeline"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CARDS -->
+
+<section id="cards" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Player Cards</h1>
+      <p class="page-subtitle">Spend coins to unlock different card designs.</p>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="card-title">
+      Coins: <span id="cardCoins">0</span> 🪙
+    </div>
+
+    <div class="card-designs" id="cardDesigns"></div>
+
+  </div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="settings" class="page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">Update your football profile.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <div class="card-title">Player Profile</div>
+
+      <div class="form-group">
+        <label>Player Name</label>
+        <input id="settingName">
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input id="settingAge" type="number" min="5" max="100">
+      </div>
+
+      <div class="form-group">
+        <label>Starting Club</label>
+        <input id="settingClub" placeholder="Your club">
+      </div>
+
+      <div class="form-group">
+        <label>Season</label>
+        <input id="settingSeason" placeholder="2026/27">
+      </div>
+
+      <div class="form-group">
+        <label>Position 1</label>
+        <select id="position1"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Position 2</label>
+        <select id="position2"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Position 3</label>
+        <select id="position3"></select>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveSettings()">
+        Save Profile
+      </button>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">Data</div>
+
+      <p style="color:var(--muted);font-size:13px">
+        Your tracker is stored locally in your browser.
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="exportData()">
+          Export Data
+        </button>
+
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">
+          Import Data
+        </button>
+
+        <input
+          type="file"
+          id="importFile"
+          accept=".json"
+          style="display:none"
+          onchange="importData(event)"
+        >
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+</div>
+
+
+<!-- RESET MODAL -->
+
+<div class="modal" id="resetModal">
+
+  <div class="modal-box">
+
+    <h2>Reset Football Lock-In?</h2>
+
+    <p style="color:var(--muted)">
+      This will remove your player progress, matches, training history,
+      goals, diary entries and career timeline.
+    </p>
+
+    <div class="modal-actions">
+
+      <button class="btn btn-secondary" onclick="closeResetModal()">
+        Cancel
+      </button>
+
+      <button class="btn btn-danger" onclick="resetData()">
+        Reset Everything
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<script>
+
+const STORAGE_KEY = "footballLockin";
+
+const positions = [
+  "LW","RW","ST","CAM","CM",
+  "CDM","LB","RB","CB","GK"
+];
+
+const attributes = [
+  "Pace",
+  "Acceleration",
+  "Dribbling",
+  "Ball Control",
+  "Shooting",
+  "Crossing",
+  "Passing",
+  "Decisions",
+  "Stamina",
+  "Strength"
+];
+
+const defaultData = {
+  profile:{
+    name:"Player",
+    age:15,
+    club:"",
+    positions:["LW"],
+    season:"2026/27"
+  },
+
+  attributes:{
+    "Pace":50,
+    "Acceleration":50,
+    "Dribbling":50,
+    "Ball Control":50,
+    "Shooting":50,
+    "Crossing":50,
+    "Passing":50,
+    "Decisions":50,
+    "Stamina":50,
+    "Strength":50
+  },
+
+  xp:0,
+  level:1,
+  coins:0,
+
+  matches:[],
+  training:[],
+  goals:[],
+  recovery:[],
+  diary:[],
+  timeline:[],
+
+  schedule:{
+    matchDays:[],
+    teamTrainingDays:[]
+  },
+
+  overallHistory:[50],
+
+  selectedCard:"red",
+  unlockedCards:["red"]
+};
+
+let data = loadData();
+
+
+function loadData(){
+
+  try{
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if(saved){
+
+      const parsed = JSON.parse(saved);
+
+      return mergeDefaults(
+        JSON.parse(JSON.stringify(defaultData)),
+        parsed
+      );
+
+    }
+
+  }catch(e){}
+
+  return JSON.parse(JSON.stringify(defaultData));
+}
+
+
+function mergeDefaults(base, saved){
+
+  Object.keys(saved || {}).forEach(key=>{
+
+    if(
+      saved[key] &&
+      typeof saved[key] === "object" &&
+      !Array.isArray(saved[key]) &&
+      typeof base[key] === "object"
+    ){
+
+      base[key] = mergeDefaults(base[key],saved[key]);
+
+    }else{
+
+      base[key] = saved[key];
+
+    }
+
+  });
+
+  return base;
+}
+
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function notify(title,text,type="success"){
+
+  const container =
+    document.getElementById("toastContainer");
+
+  const toast =
+    document.createElement("div");
+
+  toast.className="toast";
+
+  if(type==="error"){
+    toast.style.borderLeftColor="var(--red)";
+  }
+
+  toast.innerHTML=`
+    <div class="toast-title">${esc(title)}</div>
+    <div class="toast-text">${esc(text)}</div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(()=>{
+
+    toast.style.opacity="0";
+    toast.style.transform="translateY(8px)";
+    toast.style.transition=".25s";
+
+    setTimeout(()=>{
+      toast.remove();
+    },250);
+
+  },3000);
+
+}
+
+
+function showPage(id,button){
+
+  document.querySelectorAll(".page")
+    .forEach(page=>page.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn=>btn.classList.remove("active"));
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  refreshAll();
+
+}
+
+
+function getOverall(){
+
+  const values =
+    Object.values(data.attributes);
+
+  return Math.round(
+    values.reduce((a,b)=>a+b,0) / values.length
+  );
+
+}
+
+
+function updateOverallHistory(){
+
+  const overall = getOverall();
+
+  const last =
+    data.overallHistory[data.overallHistory.length-1];
+
+  if(last !== overall){
+    data.overallHistory.push(overall);
+  }
+
+}
+
+
+function addXP(amount){
+
+  data.xp += amount;
+
+  let leveled=false;
+
+  while(data.xp >= 100){
+
+    data.xp -= 100;
+    data.level++;
+    data.coins += 50;
+    leveled=true;
+
+    addTimeline(
+      "Level Up",
+      `Reached Level ${data.level}`
+    );
+
+  }
+
+  if(leveled){
+
+    notify(
+      "Level Up!",
+      `You reached Level ${data.level} and earned 50 coins.`
+    );
+
+  }
+
+}
+
+
+function addTimeline(title,text){
+
+  data.timeline.unshift({
+
+    date:new Date().toLocaleDateString("en-GB"),
+    title,
+    text
+
+  });
+
+}
+
+
+function renderProfile(){
+
+  const p=data.profile;
+  const overall=getOverall();
+
+  document.getElementById("welcomeName")
+    .textContent=`Welcome, ${p.name}`;
+
+  document.getElementById("welcomeInfo")
+    .textContent=
+      `${p.club || "Club not set"} • ${p.season} • ${p.positions.join(" / ")}`;
+
+  document.getElementById("overallValue")
+    .textContent=overall;
+
+  document.getElementById("profileName")
+    .textContent=p.name;
+
+  document.getElementById("profileAge")
+    .textContent=p.age;
+
+  document.getElementById("profileClub")
+    .textContent=p.club || "Not set";
+
+  document.getElementById("profileSeason")
+    .textContent=p.season;
+
+  document.getElementById("careerSeason")
+    .textContent=p.season;
+
+  document.getElementById("careerOverall")
+    .textContent=overall;
+
+  document.getElementById("profilePositions")
+    .innerHTML=p.positions
+      .map(pos=>`
+        <span class="position-pill">
+          ${esc(pos)}
+        </span>
+      `)
+      .join("");
+
+}
+
+
+function renderAttributes(containerId){
+
+  const container =
+    document.getElementById(containerId);
+
+  if(!container) return;
+
+  container.innerHTML =
+    attributes.map(attr=>{
+
+      const value=data.attributes[attr];
+
+      return `
+        <div class="attribute">
+
+          <div class="attribute-top">
+            <span>${esc(attr)}</span>
+            <span class="attribute-value">${value}</span>
+          </div>
+
+          <div class="attr-track">
+            <div
+              class="attr-fill"
+              style="width:${Math.min(100,value)}%"
+            ></div>
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+function renderXP(){
+
+  const needed=100;
+
+  const percent =
+    Math.min(100,(data.xp/needed)*100);
+
+  document.getElementById("headerLevel")
+    .textContent=data.level;
+
+  document.getElementById("headerCoins")
+    .textContent=data.coins;
+
+  document.getElementById("dashLevel")
+    .textContent=data.level;
+
+  document.getElementById("dashXP")
+    .textContent=`${data.xp} XP`;
+
+  document.getElementById("dashCoins")
+    .textContent=data.coins;
+
+  document.getElementById("xpLevelText")
+    .textContent=`Level ${data.level}`;
+
+  document.getElementById("xpText")
+    .textContent=`${data.xp} / ${needed} XP`;
+
+  document.getElementById("xpBar")
+    .style.width=`${percent}%`;
+
+}
+
+
+function renderStats(){
+
+  document.getElementById("dashMatches")
+    .textContent=data.matches.length;
+
+  document.getElementById("dashTraining")
+    .textContent=data.training.length;
+
+  document.getElementById("careerMatches")
+    .textContent=data.matches.length;
+
+  document.getElementById("careerTraining")
+    .textContent=data.training.length;
+
+}
+
+
+function getWeeklySchedule(){
+
+  if(!data.schedule){
+    data.schedule={
+      matchDays:[],
+      teamTrainingDays:[]
+    };
+  }
+
+  if(!Array.isArray(data.schedule.matchDays)){
+    data.schedule.matchDays=[];
+  }
+
+  if(!Array.isArray(data.schedule.teamTrainingDays)){
+    data.schedule.teamTrainingDays=[];
+  }
+
+  return data.schedule;
+
+}
+
+
+function getAutoDayPlan(days,index,schedule){
+
+  const day=days[index];
+  const isMatch=schedule.matchDays.includes(day);
+  const isTeam=schedule.teamTrainingDays.includes(day);
+
+  if(isMatch && isTeam){
+    return ["⚽ GAME + 🏃 TEAM TRAINING","Busy football day"];
+  }
+
+  if(isMatch){
+    return ["⚽ GAME DAY","Match day — keep extra training light"];
+  }
+
+  if(isTeam){
+    return ["🏃 TEAM TRAINING","Club/team session"];
+  }
+
+  const previous=days[(index+6)%7];
+  const next=days[(index+1)%7];
+  const previousMatch=schedule.matchDays.includes(previous);
+  const nextMatch=schedule.matchDays.includes(next);
+
+  if(previousMatch){
+    return ["💚 RECOVERY","Recover after your game"];
+  }
+
+  if(nextMatch){
+    return ["🎯 LIGHT SELF TRAINING","Prepare for your next game"];
+  }
+
+  return ["🏃 SELF TRAINING","Individual development session"];
+
+}
+
+
+function renderWeeklyPlan(){
+
+  const days=["MON","TUE","WED","THU","FRI","SAT","SUN"];
+  const schedule=getWeeklySchedule();
+
+  const html=days.map((day,index)=>{
+
+    const plan=getAutoDayPlan(days,index,schedule);
+
+    return `
+      <div class="plan-item">
+        <div class="plan-day">${day}</div>
+        <div class="plan-info">
+          <strong>${plan[0]}</strong>
+          <span>${plan[1]}</span>
+        </div>
+      </div>
+    `;
+
+  }).join("");
+
+  const dashboard=document.getElementById("weeklyPlan");
+  const training=document.getElementById("trainingWeeklyPlan");
+
+  if(dashboard) dashboard.innerHTML=html;
+  if(training) training.innerHTML=html;
+
+  renderScheduleChecks();
+
+}
+
+
+function renderScheduleChecks(){
+
+  const schedule=getWeeklySchedule();
+
+  document.querySelectorAll(".match-day-check").forEach(box=>{
+    box.checked=schedule.matchDays.includes(box.value);
+  });
+
+  document.querySelectorAll(".team-day-check").forEach(box=>{
+    box.checked=schedule.teamTrainingDays.includes(box.value);
+  });
+
+}
+
+
+function saveWeeklySchedule(){
+
+  const matchDays=[
+    ...document.querySelectorAll(".match-day-check:checked")
+  ].map(box=>box.value);
+
+  const teamTrainingDays=[
+    ...document.querySelectorAll(".team-day-check:checked")
+  ].map(box=>box.value);
+
+  data.schedule={
+    matchDays,
+    teamTrainingDays
+  };
+
+  saveData();
+  renderWeeklyPlan();
+
+  notify(
+    "Weekly Schedule Saved",
+    "Your games and team training are set. Self-training has been arranged around them."
+  );
+
+}
+
+const drills=[
+
+  {
+    name:"Sprint Starts",
+    image:"https://images.pexels.com/photos/14705681/pexels-photo-14705681.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Explosive starts to improve acceleration and first-step speed.",
+    attrs:["Pace","Acceleration"],
+    instructions:"Stand behind a starting line. Accelerate hard for 10–20 metres, walk back and recover fully. Focus on powerful first steps and good running technique."
+  },
+
+  {
+    name:"High Knees",
+    image:"https://images.pexels.com/photos/4662354/pexels-photo-4662354.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"A dynamic movement drill for running mechanics and conditioning.",
+    attrs:["Acceleration","Stamina"],
+    instructions:"Drive your knees upward while staying tall. Keep your arms moving naturally and maintain controlled, quick steps."
+  },
+
+  {
+    name:"Agility Ladder",
+    image:"https://images.pexels.com/photos/38675856/pexels-photo-38675856.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Quick-footwork patterns for agility and ball control.",
+    attrs:["Pace","Acceleration","Ball Control"],
+    instructions:"Work through different ladder patterns with quick, controlled feet. Keep your head up when possible and avoid rushing your technique."
+  },
+
+  {
+    name:"Cone Dribbling",
+    image:"https://images.pexels.com/photos/35420838/pexels-photo-35420838.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Close-control dribbling around cones.",
+    attrs:["Dribbling","Ball Control"],
+    instructions:"Set up 5–8 cones with space between them. Dribble through using both feet. Keep touches close and gradually increase your speed."
+  },
+
+  {
+    name:"Jump Power",
+    image:"https://images.pexels.com/photos/13022993/pexels-photo-13022993.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Controlled jumping movements to develop lower-body power.",
+    attrs:["Strength","Stamina"],
+    instructions:"Use controlled jumps with a stable landing. Keep your knees aligned and focus on quality rather than doing as many repetitions as possible."
+  },
+
+  {
+    name:"Passing Practice",
+    image:"https://images.pexels.com/photos/17955594/pexels-photo-17955594.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Improve passing accuracy and decision-making.",
+    attrs:["Passing","Decisions"],
+    instructions:"Pass against a wall or with a teammate. Alternate feet and vary the distance. Focus on receiving your next touch into useful space."
+  },
+
+  {
+    name:"Finishing",
+    image:"https://images.pexels.com/photos/12239376/pexels-photo-12239376.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    description:"Practice finishing from different positions.",
+    attrs:["Shooting","Crossing"],
+    instructions:"Work on controlled finishes from different angles. Focus on placement, technique and choosing the right finish rather than simply hitting the ball hard."
+  }
+
+];
+
+
+function renderDrills(){
+
+  const grid =
+    document.getElementById("drillGrid");
+
+  if(!grid) return;
+
+  grid.innerHTML =
+    drills.map((drill,index)=>`
+
+      <div class="drill-card">
+
+        <img
+          class="drill-image"
+          src="${drill.image}"
+          alt="${esc(drill.name)}"
+        >
+
+        <div class="drill-content">
+
+          <div class="drill-title">
+            ${esc(drill.name)}
+          </div>
+
+          <div class="drill-description">
+            ${esc(drill.description)}
+          </div>
+
+          <div class="drill-tags">
+
+            ${drill.attrs.map(attr=>`
+              <span class="tag">
+                + ${esc(attr)}
+              </span>
+            `).join("")}
+
+          </div>
+
+          <div class="drill-actions">
+
+            <button
+              class="btn btn-secondary"
+              onclick="toggleInstructions(${index})"
+            >
+              Instructions
+            </button>
+
+            <button
+              class="btn btn-primary"
+              onclick="completeDrill(${index})"
+            >
+              Complete
+            </button>
+
+          </div>
+
+        </div>
+
+        <div
+          class="instructions"
+          id="instructions-${index}"
+        >
+          ${esc(drill.instructions)}
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function toggleInstructions(index){
+
+  const el=
+    document.getElementById(`instructions-${index}`);
+
+  el.classList.toggle("show");
+
+}
+
+
+function completeDrill(index){
+
+  const drill=drills[index];
+
+  drill.attrs.forEach(attr=>{
+
+    data.attributes[attr]=
+      Math.min(
+        100,
+        data.attributes[attr]+1
+      );
+
+  });
+
+  data.training.unshift({
+
+    date:new Date().toLocaleDateString("en-GB"),
+    name:drill.name,
+    type:drill.name,
+    minutes:20,
+    attrs:drill.attrs
+
+  });
+
+  addXP(20);
+
+  data.coins += 5;
+
+  updateOverallHistory();
+
+  addTimeline(
+    "Training Completed",
+    `${drill.name} completed`
+  );
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Training Complete",
+    `+1 ${drill.attrs.join(", +1 ")} • +20 XP • +5 coins`
+  );
+
+}
+
+
+function completeCustomWorkout(){
+
+  const name =
+    document.getElementById("customWorkoutName").value.trim()
+    || "Custom Workout";
+
+  const type =
+    document.getElementById("customWorkoutType").value;
+
+  const minutes =
+    Number(document.getElementById("customWorkoutMinutes").value) || 30;
+
+  const mapping={
+
+    Speed:["Pace","Acceleration"],
+
+    Dribbling:["Dribbling","Ball Control"],
+
+    Shooting:["Shooting","Crossing"],
+
+    Passing:["Passing","Decisions"],
+
+    Stamina:["Stamina"],
+
+    Strength:["Strength","Stamina"],
+
+    Decisions:["Decisions","Passing"]
+
+  };
+
+  const affected=mapping[type] || [];
+
+  affected.forEach(attr=>{
+
+    data.attributes[attr]=
+      Math.min(
+        100,
+        data.attributes[attr]+1
+      );
+
+  });
+
+  data.training.unshift({
+
+    date:new Date().toLocaleDateString("en-GB"),
+    name,
+    type,
+    minutes,
+    attrs:affected
+
+  });
+
+  addXP(25);
+  data.coins+=8;
+
+  updateOverallHistory();
+
+  addTimeline(
+    "Custom Workout",
+    `${name} completed`
+  );
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Workout Complete",
+    `+25 XP • +8 coins`
+  );
+
+}
+
+
+function renderTrainingHistory(){
+
+  const el=
+    document.getElementById("trainingHistory");
+
+  if(!el) return;
+
+  if(!data.training.length){
+
+    el.innerHTML=
+      `<div class="empty">No training sessions yet.</div>`;
+
+    return;
+  }
+
+  el.innerHTML=
+    data.training.slice(0,8).map(t=>`
+
+      <div
+        style="
+          padding:12px 0;
+          border-bottom:1px solid var(--border)
+        "
+      >
+
+        <strong>${esc(t.name)}</strong>
+
+        <div style="
+          color:var(--muted);
+          font-size:11px;
+          margin-top:4px
+        ">
+
+          ${esc(t.date)}
+          • ${t.minutes || 20} min
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function num(id){
+
+  return Number(
+    document.getElementById(id)?.value || 0
+  );
+
+}
+
+
+function calculateRating(){
+
+  let rating=6;
+
+  rating += num("goals") * 1.1;
+  rating += num("assists") * .8;
+  rating += num("shotsTarget") * .18;
+  rating += num("dribbles") * .16;
+  rating += num("tackles") * .12;
+  rating += num("crosses") * .1;
+
+  const result=
+    document.getElementById("result").value;
+
+  if(result==="win") rating+=.35;
+
+  if(result==="loss") rating-=.25;
+  rating-=num("missed")*.35;
+
+  if(num("cards")===1) rating-=.25;
+
+  if(num("cards")>=2) rating-=1.5;
+
+  if(num("minutes")<30) rating-=.15;
+
+  return Math.max(
+    3,
+    Math.min(
+      10,
+      Math.round(rating*10)/10
+    )
+  );
+
+}
+
+
+function updatePreviewRating(){
+
+  document.getElementById("previewRating")
+    .textContent=calculateRating().toFixed(1);
+
+}
+
+
+function recordMatch(){
+
+  const opponent=
+    document.getElementById("opponent").value.trim();
+
+  if(!opponent){
+
+    notify(
+      "Missing Opponent",
+      "Enter the opponent first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const rating=calculateRating();
+
+  const match={
+
+    date:
+      document.getElementById("matchDate").value
+      || new Date().toISOString().split("T")[0],
+
+    opponent,
+
+    result:
+      document.getElementById("result").value,
+
+    goals:num("goals"),
+    assists:num("assists"),
+    rating
+
+  };
+
+  data.matches.unshift(match);
+
+  addXP(30);
+
+  data.coins+=10;
+
+  addTimeline(
+    "Match Recorded",
+    `vs ${opponent} • Rating ${rating}`
+  );
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Match Saved",
+    `Match rating: ${rating}`
+  );
+
+}
+
+
+function renderMatches(){
+
+  const tbody=
+    document.getElementById("matchTable");
+
+  if(!tbody) return;
+
+  if(!data.matches.length){
+
+    tbody.innerHTML=`
+      <tr>
+        <td colspan="6" class="empty">
+          No matches recorded yet.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  tbody.innerHTML=
+    data.matches.map(m=>`
+
+      <tr>
+
+        <td>${esc(m.date)}</td>
+
+        <td>${esc(m.opponent)}</td>
+
+        <td>
+
+          <span class="
+            badge
+            ${m.result==="win"
+              ?"badge-green"
+              :m.result==="loss"
+                ?"badge-red"
+                :"badge-orange"}
+          ">
+            ${esc(m.result)}
+          </span>
+
+        </td>
+
+        <td>${m.goals}</td>
+
+        <td>${m.assists}</td>
+
+        <td>
+          <strong>${m.rating}</strong>
+        </td>
+
+      </tr>
+
+    `).join("");
+
+}
+
+
+function addGoal(){
+
+  const name=
+    document.getElementById("goalName").value.trim();
+
+  const target=
+    Number(document.getElementById("goalTarget").value);
+
+  const unit=
+    document.getElementById("goalUnit").value.trim();
+
+  if(!name || !target){
+
+    notify(
+      "Missing Goal",
+      "Enter a goal and target.",
+      "error"
+    );
+
+    return;
+  }
+
+  data.goals.push({
+
+    id:Date.now(),
+    name,
+    target,
+    unit,
+    progress:0
+
+  });
+
+  document.getElementById("goalName").value="";
+  document.getElementById("goalTarget").value=10;
+  document.getElementById("goalUnit").value="";
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Goal Added",
+    "Your new football goal has been added."
+  );
+
+}
+
+
+function updateGoal(id){
+
+  const goal=
+    data.goals.find(g=>g.id===id);
+
+  if(!goal) return;
+
+  const value=
+    prompt(
+      `Progress for "${goal.name}"`,
+      goal.progress
+    );
+
+  if(value===null) return;
+
+  goal.progress=
+    Math.max(
+      0,
+      Math.min(
+        goal.target,
+        Number(value)||0
+      )
+    );
+
+  saveData();
+  refreshAll();
+
+}
+
+
+function renderGoals(){
+
+  const el=
+    document.getElementById("goalsList");
+
+  if(!el) return;
+
+  if(!data.goals.length){
+
+    el.innerHTML=
+      `<div class="empty">No goals yet.</div>`;
+
+    return;
+
+  }
+
+  el.innerHTML=
+    data.goals.map(goal=>{
+
+      const percent=
+        Math.min(
+          100,
+          Math.round(
+            goal.progress/goal.target*100
+          )
+        );
+
+      return `
+
+        <div class="goal">
+
+          <div class="goal-top">
+
+            <div class="goal-name">
+              ${esc(goal.name)}
+            </div>
+
+            <div class="goal-percent">
+              ${percent}%
+            </div>
+
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:${percent}%"
+            ></div>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:9px;
+          ">
+
+            <span style="
+              color:var(--muted);
+              font-size:11px
+            ">
+              ${goal.progress}/${goal.target}
+              ${esc(goal.unit)}
+            </span>
+
+            <button
+              class="btn btn-secondary"
+              onclick="updateGoal(${goal.id})"
+            >
+              Update
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function renderCharts(){
+
+  renderBarChart(
+    "overallChart",
+    data.overallHistory
+  );
+
+  renderBarChart(
+    "ratingChart",
+    data.matches
+      .slice()
+      .reverse()
+      .map(m=>m.rating)
+  );
+
+}
+
+
+function renderBarChart(id,values){
+
+  const el=document.getElementById(id);
+
+  if(!el) return;
+
+  if(!values.length){
+
+    el.innerHTML=
+      `<div class="empty">No data yet.</div>`;
+
+    return;
+
+  }
+
+  const max=
+    Math.max(...values,10);
+
+  el.innerHTML=
+    values.slice(-15).map((value,i)=>{
+
+      const height=
+        Math.max(
+          5,
+          (value/max)*100
+        );
+
+      return `
+
+        <div
+          class="bar"
+          style="height:${height}%"
+          title="${value}"
+        >
+          <span class="bar-label">
+            ${Math.round(value*10)/10}
+          </span>
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function renderStatsPage(){
+
+  const el=
+    document.getElementById("statsAttributes");
+
+  if(!el) return;
+
+  el.innerHTML=
+    attributes.map(attr=>{
+
+      const value=data.attributes[attr];
+
+      return `
+
+        <div class="card" style="box-shadow:none">
+
+          <div class="attribute-top">
+            <span>${esc(attr)}</span>
+            <span class="attribute-value">
+              ${value}
+            </span>
+          </div>
+
+          <div class="attr-track">
+
+            <div
+              class="attr-fill"
+              style="width:${value}%"
+            ></div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function getWeakAttributes(){
+
+  return [...attributes]
+    .sort(
+      (a,b)=>
+        data.attributes[a]-
+        data.attributes[b]
+    )
+    .slice(0,3);
+
+}
+
+
+function renderRecommendation(){
+
+  const weak=
+    getWeakAttributes();
+
+  const el=
+    document.getElementById("smartRecommendation");
+
+  if(!el) return;
+
+  const recommendations=
+    weak.map(attr=>{
+
+      const value=data.attributes[attr];
+
+      let priority="Medium";
+
+      if(value<45) priority="High";
+
+      if(value>=55) priority="Maintain";
+
+      return {attr,value,priority};
+
+    });
+
+  el.innerHTML=
+    recommendations.map(r=>`
+
+      <div class="
+        recommendation
+        ${r.priority==="High"
+          ?"high"
+          :r.priority==="Maintain"
+            ?"maintain"
+            :""}
+      ">
+
+        <strong>
+          ${r.attr} — ${r.priority}
+        </strong>
+
+        <span>
+          Current rating: ${r.value}.
+          ${
+            r.priority==="High"
+              ?"Give this area extra attention."
+              :r.priority==="Maintain"
+                ?"Keep this area in your routine."
+                :"Continue developing this area."
+          }
+        </span>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function saveRecovery(){
+
+  const sleep=
+    Number(document.getElementById("sleepQuality").value);
+
+  const energy=
+    Number(document.getElementById("energy").value);
+
+  const soreness=
+    Number(document.getElementById("soreness").value);
+
+  const readiness=
+    Math.round(
+      ((sleep+energy+soreness)/15)*100
+    );
+
+  data.recovery.unshift({
+
+    date:new Date().toLocaleDateString("en-GB"),
+    sleep,
+    energy,
+    soreness,
+    readiness
+
+  });
+
+  saveData();
+
+  document.getElementById("readinessValue")
+    .textContent=readiness;
+
+  document.getElementById("readinessText")
+    .textContent=
+      readiness>=80
+        ?"Feeling ready."
+        :readiness>=60
+          ?"Consider keeping training moderate."
+          :"Recovery should be a priority today.";
+
+  notify(
+    "Recovery Saved",
+    `Readiness: ${readiness}%`
+  );
+
+}
+
+
+function renderRecovery(){
+
+  const latest=data.recovery[0];
+
+  if(!latest) return;
+
+  const value=
+    document.getElementById("readinessValue");
+
+  const text=
+    document.getElementById("readinessText");
+
+  if(value) value.textContent=latest.readiness;
+
+  if(text){
+
+    text.textContent=
+      latest.readiness>=80
+        ?"Feeling ready."
+        :latest.readiness>=60
+          ?"Consider keeping training moderate."
+          :"Recovery should be a priority today.";
+
+  }
+
+}
+
+
+function addDiary(){
+
+  const text=
+    document.getElementById("diaryText")
+      .value.trim();
+
+  if(!text){
+
+    notify(
+      "Empty Entry",
+      "Write something in your diary first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const date=
+    document.getElementById("diaryDate").value
+    || new Date().toISOString().split("T")[0];
+
+  data.diary.unshift({
+    date,
+    text
+  });
+
+  document.getElementById("diaryText").value="";
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Diary Saved",
+    "Your football diary entry has been saved."
+  );
+
+}
+
+
+function renderDiary(){
+
+  const el=
+    document.getElementById("diaryList");
+
+  if(!el) return;
+
+  if(!data.diary.length){
+
+    el.innerHTML=
+      `<div class="empty">No diary entries yet.</div>`;
+
+    return;
+
+  }
+
+  el.innerHTML=
+    data.diary.map(entry=>`
+
+      <div style="
+        border-bottom:1px solid var(--border);
+        padding:13px 0
+      ">
+
+        <div style="
+          color:var(--muted);
+          font-size:11px;
+          margin-bottom:5px
+        ">
+          ${esc(entry.date)}
+        </div>
+
+        <div style="
+          line-height:1.5;
+          font-size:13px
+        ">
+          ${esc(entry.text)}
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function renderReports(){
+
+  const el=
+    document.getElementById("weeklyReport");
+
+  if(!el) return;
+
+  const trainingCount=data.training.length;
+
+  const matchCount=data.matches.length;
+
+  const latestMatches=
+    data.matches.slice(0,5);
+
+  const averageRating=
+    latestMatches.length
+      ? (
+          latestMatches.reduce(
+            (sum,m)=>sum+m.rating,
+            0
+          )/latestMatches.length
+        ).toFixed(1)
+      : "—";
+
+  const weak=
+    getWeakAttributes();
+
+  el.innerHTML=`
+
+    <div class="grid grid-4">
+
+      <div class="card stat-card">
+        <div class="stat-label">TRAINING</div>
+        <div class="stat-value">${trainingCount}</div>
+        <div class="stat-small">Total sessions</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">MATCHES</div>
+        <div class="stat-value">${matchCount}</div>
+        <div class="stat-small">Recorded</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">AVG RATING</div>
+        <div class="stat-value">${averageRating}</div>
+        <div class="stat-small">Recent matches</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">OVERALL</div>
+        <div class="stat-value">${getOverall()}</div>
+        <div class="stat-small">Current</div>
+      </div>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+      <div class="card-title">
+        Areas To Work On
+      </div>
+
+      ${weak.map(attr=>`
+
+        <div class="recommendation">
+
+          <strong>${esc(attr)}</strong>
+
+          <span>
+            Current attribute: ${data.attributes[attr]}
+          </span>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+function renderTimeline(){
+
+  const el=
+    document.getElementById("timeline");
+
+  if(!el) return;
+
+  if(!data.timeline.length){
+
+    el.innerHTML=
+      `<div class="empty">Your career timeline will appear here.</div>`;
+
+    return;
+
+  }
+
+  el.innerHTML=
+    data.timeline.slice(0,20)
+      .map(item=>`
+
+        <div class="timeline-item">
+
+          <div class="timeline-date">
+            ${esc(item.date)}
+          </div>
+
+          <div class="timeline-title">
+            ${esc(item.title)}
+          </div>
+
+          <div style="
+            color:var(--muted);
+            font-size:12px;
+            margin-top:3px
+          ">
+            ${esc(item.text)}
+          </div>
+
+        </div>
+
+      `).join("");
+
+}
+
+
+const cardInfo={
+
+  red:{
+    name:"Red",
+    level:1,
+    class:"card-red"
+  },
+
+  blue:{
+    name:"Blue",
+    level:3,
+    class:"card-blue"
+  },
+
+  green:{
+    name:"Green",
+    level:5,
+    class:"card-green"
+  },
+
+  purple:{
+    name:"Purple",
+    level:8,
+    class:"card-purple"
+  },
+
+  gold:{
+    name:"Gold",
+    level:10,
+    class:"card-gold"
+  }
+
+};
+
+
+function getUnlockedCards(){
+
+  return Object.keys(cardInfo)
+    .filter(card=>
+      data.level>=cardInfo[card].level
+    );
+
+}
+
+
+function renderCards(){
+
+  const el=
+    document.getElementById("cardDesigns");
+
+  if(!el) return;
+
+  document.getElementById("cardCoins")
+    .textContent=data.coins;
+
+  el.innerHTML=
+    Object.keys(cardInfo).map(card=>{
+
+      const info=cardInfo[card];
+
+      const unlocked=
+        data.level>=info.level;
+
+      return `
+
+        <div
+          class="
+            player-card
+            ${info.class}
+            ${data.selectedCard===card
+              ?"selected"
+              :""}
+          "
+          onclick="${unlocked
+            ?`selectCard('${card}')`
+            :""}"
+          style="
+            opacity:${unlocked?1:.45};
+            cursor:${unlocked?"pointer":"default"}
+          "
+        >
+
+          <div class="card-rating">
+            ${getOverall()}
+          </div>
+
+          <div class="card-name">
+            ${esc(data.profile.name)}
+          </div>
+
+          <div class="card-position">
+            ${esc(data.profile.positions[0] || "")}
+          </div>
+
+          ${
+            unlocked
+              ?`<div style="margin-top:10px;font-size:10px">
+                  ${data.selectedCard===card
+                    ?"SELECTED"
+                    :"AVAILABLE"}
+                </div>`
+              :`<div style="margin-top:10px;font-size:10px">
+                  Unlocks at Level ${info.level}
+                </div>`
+          }
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function selectCard(card){
+
+  if(data.level<cardInfo[card].level){
+
+    notify(
+      "Card Locked",
+      `Reach Level ${cardInfo[card].level} to unlock it.`,
+      "error"
+    );
+
+    return;
+
+  }
+
+  data.selectedCard=card;
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Card Selected",
+    `${cardInfo[card].name} card selected.`
+  );
+
+}
+
+
+function populatePositions(){
+
+  const selects=[
+    document.getElementById("position1"),
+    document.getElementById("position2"),
+    document.getElementById("position3")
+  ];
+
+  selects.forEach(select=>{
+
+    if(!select) return;
+
+    select.innerHTML=
+      `<option value="">None</option>`+
+      positions.map(pos=>`
+        <option value="${pos}">
+          ${pos}
+        </option>
+      `).join("");
+
+  });
+
+}
+
+
+function renderSettings(){
+
+  const p=data.profile;
+
+  const name=
+    document.getElementById("settingName");
+
+  const age=
+    document.getElementById("settingAge");
+
+  const club=
+    document.getElementById("settingClub");
+
+  const season=
+    document.getElementById("settingSeason");
+
+  if(name) name.value=p.name;
+  if(age) age.value=p.age;
+  if(club) club.value=p.club;
+  if(season) season.value=p.season;
+
+  const pos=p.positions;
+
+  document.getElementById("position1").value=
+    pos[0] || "";
+
+  document.getElementById("position2").value=
+    pos[1] || "";
+
+  document.getElementById("position3").value=
+    pos[2] || "";
+
+}
+
+
+function saveSettings(){
+
+  const selected=[
+    document.getElementById("position1").value,
+    document.getElementById("position2").value,
+    document.getElementById("position3").value
+  ].filter(Boolean);
+
+  data.profile.name=
+    document.getElementById("settingName").value.trim()
+    || "Player";
+
+  data.profile.age=
+    Number(document.getElementById("settingAge").value)
+    || 15;
+
+  data.profile.club=
+    document.getElementById("settingClub").value.trim();
+
+  data.profile.season=
+    document.getElementById("settingSeason").value.trim()
+    || "2026/27";
+
+  data.profile.positions=
+    selected.length
+      ? [...new Set(selected)]
+      : ["LW"];
+
+  saveData();
+  refreshAll();
+
+  notify(
+    "Profile Updated",
+    "Your player profile has been saved."
+  );
+
+}
+
+
+function exportData(){
+
+  const blob=
+    new Blob(
+      [JSON.stringify(data,null,2)],
+      {type:"application/json"}
+    );
+
+  const url=
+    URL.createObjectURL(blob);
+
+  const a=
+    document.createElement("a");
+
+  a.href=url;
+  a.download="football-lock-in-data.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+function importData(event){
+
+  const file=
+    event.target.files[0];
+
+  if(!file) return;
+
+  const reader=
+    new FileReader();
+
+  reader.onload=function(){
+
+    try{
+
+      const imported=
+        JSON.parse(reader.result);
+
+      data=mergeDefaults(
+        JSON.parse(JSON.stringify(defaultData)),
+        imported
+      );
+
+      saveData();
+      refreshAll();
+
+      notify(
+        "Data Imported",
+        "Your Football Lock-In data has been restored."
+      );
+
+    }catch(e){
+
+      notify(
+        "Import Failed",
+        "That file could not be imported.",
+        "error"
+      );
+
+    }
+
+  };
+
+  reader.readAsText(file);
+
+}
+
+
+function openResetModal(){
+
+  document
+    .getElementById("resetModal")
+    .classList.add("show");
+
+}
+
+
+function closeResetModal(){
+
+  document
+    .getElementById("resetModal")
+    .classList.remove("show");
+
+}
+
+
+function resetData(){
+
+  data=
+    JSON.parse(
+      JSON.stringify(defaultData)
+    );
+
+  saveData();
+
+  closeResetModal();
+
+  refreshAll();
+
+  notify(
+    "Tracker Reset",
+    "Football Lock-In has been reset to a fresh start."
+  );
+
+}
+
+
+function refreshAll(){
+
+  updateOverallHistory();
+
+  renderProfile();
+  renderXP();
+  renderStats();
+
+  renderAttributes("dashboardAttributes");
+
+  renderWeeklyPlan();
+
+  renderDrills();
+  renderTrainingHistory();
+
+  renderMatches();
+
+  renderGoals();
+
+  renderCharts();
+  renderStatsPage();
+
+  renderRecommendation();
+
+  renderRecovery();
+
+  renderDiary();
+
+  renderReports();
+
+  renderTimeline();
+
+  renderCards();
+
+  renderSettings();
+
+}
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  populatePositions();
+
+  const today=
+    new Date().toISOString().split("T")[0];
+
+  const matchDate=
+    document.getElementById("matchDate");
+
+  const diaryDate=
+    document.getElementById("diaryDate");
+
+  if(matchDate) matchDate.value=today;
+
+  if(diaryDate) diaryDate.value=today;
+
+  refreshAll();
+
+});
+
+
+</script>
+
+</body>
+</html>
